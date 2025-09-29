@@ -1,22 +1,33 @@
 
 # 📝 Table sign-up sheet
 
-# List to store all players (each player is a dictionary with name, age, and slot)
-players = []
-
-# Dictionary of available time slots
-# Each slot has its own list of players
-time_slots = {
-    "10:00 AM": [],
-    "11:00 AM": [],
-    "12:00 PM": [],
-}
-
 # Limits
+import json
+
+
 MAX_PER_SLOT = 1   # maximum players per time slot
 MAX_PLAYERS = 3    # maximum players overall
 MIN_AGE = 6        # minimum age allowed
 MAX_AGE = 65       # maximum age allowed
+
+
+class TIME_SLOTS:
+    def __init__(self, time, attendee, max_slots):
+        self.time = time
+        self.attendee = attendee
+        self.max_slots = max_slots
+        
+# List to store all players (each player is a dictionary with name, age, and slot)
+players = []
+
+# Dictionary of available time slots
+# Each slot has its own list of players\
+time_slots = [
+    TIME_SLOTS('10:00 AM', [], MAX_PER_SLOT),
+    TIME_SLOTS('11:00 AM', [], MAX_PER_SLOT),
+    TIME_SLOTS('12:00 PM', [], MAX_PER_SLOT)
+]
+
 
 # Keep asking for players until we reach the maximum
 while len(players) < MAX_PLAYERS:
@@ -30,11 +41,13 @@ while len(players) < MAX_PLAYERS:
 
     # Show available time slots
     print("\nAvailable time slots: ")
-    for slot, signed_up in time_slots.items():
-        print(f"- {slot} ({len(signed_up)}/{MAX_PER_SLOT} spots taken)")
-
+    for i, t in enumerate(time_slots):
+        print(f"{i} - {t.time} ({len(t.attendee)}/{t.max_slots} spots taken)")
+      
     # Ask the user to choose a slot
-    chosen_slot = input("Enter your preferred time slot: ")
+    chosen_slot_index = input("Enter your preferred time slot: ")
+    chosen_slot = time_slots[int(chosen_slot_index)]
+    print(json.dumps(chosen_slot))
 
     # Check if the slot exists
     if chosen_slot not in time_slots:
